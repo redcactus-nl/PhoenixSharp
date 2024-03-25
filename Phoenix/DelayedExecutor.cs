@@ -76,7 +76,33 @@ namespace Phoenix
             {
                 if (!execution.Cancelled)
                 {
-                    action();
+                    try
+                    {
+                        action();
+                    }
+                    catch (Exception)
+                    {
+                        // Workaround do not throw exception which causes a application crash.
+                        /*
+                         * Stacktrace:
+   at System.Collections.Generic.Dictionary`2.FindValue(TKey key)
+   at System.Collections.Generic.Dictionary`2.TryGetValue(TKey key, TValue& value)
+   at Phoenix.Channel.Trigger(Message message)
+   at Phoenix.Push.Trigger(ReplyStatus status)
+   at Phoenix.Push.<StartTimeout>b__17_1()
+   at Phoenix.TaskDelayedExecutor.<>c__DisplayClass0_0.<Execute>b__0()
+   at System.Threading.Tasks.AwaitTaskContinuation.<>c.<.cctor>b__17_0(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+--- End of stack trace from previous location ---
+   at System.Threading.Tasks.Task.<>c.<ThrowAsync>b__128_1(Object state)
+   at System.Threading.QueueUserWorkItemCallbackDefaultContext.Execute()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+                         */
+                    }
                 }
             });
 
